@@ -1,6 +1,9 @@
 # Appium Client By Golang
 
-> This project just support golang appium(still in beta)
+> This project just support golang appium(still in beta) 
+
+## Installation
+> go get
 
 ## Usage
 ```go
