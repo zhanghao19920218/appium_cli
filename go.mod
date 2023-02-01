@@ -1,4 +1,4 @@
-module appium_cli
+module github.com/zhanghao19920218/appium_cli
 
 go 1.19
 
