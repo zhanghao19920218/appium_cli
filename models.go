@@ -104,9 +104,8 @@ type ActionRequestParam struct {
 }
 
 type ActionChainParams struct {
-	X        int64
-	Y        int64
-	Duration int64
+	X int64
+	Y int64
 }
 
 type ActionRequestChain struct {

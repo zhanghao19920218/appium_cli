@@ -128,14 +128,14 @@ func (driver DeviceDriverModel) ActionElement(elementParam *ActionRequestParam, 
 }
 
 // TouchActionByLoc make the location x and y to action
-func (driver DeviceDriverModel) TouchActionByLoc(action *ActionChainParams) (serverErr *AppiumError) {
+func (driver DeviceDriverModel) TouchActionByLoc(coordinate Coordinate) (serverErr *AppiumError) {
 	// Create the parameters
 	var actions []ActionRequestChain
 	actions = append(actions, ActionRequestChain{
 		Type:     "pointerMove",
-		Duration: action.Duration,
-		X:        action.X,
-		Y:        action.Y,
+		Duration: coordinate.GetDuration(),
+		X:        coordinate.GetPosition().X,
+		Y:        coordinate.GetPosition().Y,
 	})
 	actions = append(actions, ActionRequestChain{
 		Type:   "pointerDown",
