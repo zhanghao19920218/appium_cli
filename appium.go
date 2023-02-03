@@ -182,3 +182,34 @@ func (driver DeviceDriverModel) TouchActionByLoc(coordinate Coordinate) (serverE
 	}
 	return
 }
+
+// StartActivity
+//
+//	@Description: Start the activity of the another application
+//	@receiver driver
+//	@param param
+//	@return serverErr
+func (driver DeviceDriverModel) StartActivity(param *StartActivityParam) (serverErr *AppiumError) {
+	var result SessionResponse
+
+	resp, err := driver.Client.R().
+		SetBody(param).
+		SetSuccessResult(&result).
+		Post(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/appium/device/start_activity", driver.Port, driver.SessionId))
+	if err != nil {
+		serverErr = &AppiumError{
+			Message:   "Start Activity Error",
+			ErrorCode: StartActivityError,
+		}
+		return
+	}
+
+	if !resp.IsSuccessState() {
+		serverErr = &AppiumError{
+			Message:   "Start Activity Error",
+			ErrorCode: StartActivityError,
+		}
+		return
+	}
+	return
+}

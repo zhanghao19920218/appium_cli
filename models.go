@@ -130,3 +130,9 @@ type ActionsRequest struct {
 type ActionRequestArr struct {
 	Actions []ActionsRequest `json:"actions"`
 }
+
+// StartActivityParam start the another app activity params
+type StartActivityParam struct {
+	AppPackage  string `json:"appPackage"`
+	AppActivity string `json:"appActivity"`
+}

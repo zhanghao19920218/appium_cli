@@ -35,7 +35,7 @@ fmt.Println(sessionId.SessionId)
 // Find the element
 elementId, err := sessionId.FindElement(&FindElementParam{
 	Using: "id",
-	Value: "com.iflytek.inputmethod.imehook:id/editText",
+	Value: "com.wechat.hello:id/editText",
 })
 if err != nil {
 	fmt.Println(err.Message)
@@ -74,4 +74,18 @@ session := &DeviceCapabilityModel{
 		Client:                req.C(),
 }
 sessionId, err := session.CreateSession()
+```
+
+### StartActivity
+
+> **Start an Android activity by providing package name and activity name**:
+>
+> * `AppPackage`: The package of application
+> * `AppActivity`: The activity of application
+
+```go
+sessionId.StartActivity(&StartActivityParam{
+		AppPackage:  "com.wechat",
+		AppActivity: "com.wechat",
+	})
 ```

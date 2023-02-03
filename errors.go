@@ -8,6 +8,7 @@ const (
 	NotFoundElement
 	ActionElementError
 	TouchActionError
+	StartActivityError
 	Others
 )
 

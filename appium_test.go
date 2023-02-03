@@ -46,6 +46,11 @@ func TestDeviceCapabilityModel_CreateSession(t *testing.T) {
 		Y:        1215,
 		Duration: 1,
 	})
+	// Start the activity
+	sessionId.StartActivity(&StartActivityParam{
+		AppPackage:  "com.wechat",
+		AppActivity: "com.wechat",
+	})
 	// Click the element
 	sessionId.CloseSession()
 }
