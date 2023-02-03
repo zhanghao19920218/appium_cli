@@ -82,10 +82,40 @@ type DeviceDriverModel struct {
 	Port      int64
 }
 
+// AppiumBy
+// @Description: Access
+// Accessibility ID	Read a unique identifier for a UI element. For XCUITest it is the element's accessibility-id attribute. For Android it is the element's content-desc attribute.
+// Class name	For IOS it is the full name of the XCUI element and begins with XCUIElementType. For Android it is the full name of the UIAutomator2 class (e.g.: android.widget.TextView)
+// ID	Native element identifier. resource-id for android; name for iOS.
+type AppiumBy int64
+
+const (
+	AccessibilityID AppiumBy = iota
+	ID
+)
+
 // FindElementParam request post the parameters
 type FindElementParam struct {
 	Using string `json:"using"`
 	Value string `json:"value"`
+}
+
+type FindElementPoint struct {
+	AppiumBy
+	Value string
+}
+
+// GetUsingType
+//
+//	@Description: Get the using type
+//	@receiver model
+//	@return string
+func (model *FindElementPoint) GetUsingType() string {
+	if model.AppiumBy == AccessibilityID {
+		return "accessibility id"
+	} else {
+		return "id"
+	}
 }
 
 // ElementResponse get the element response

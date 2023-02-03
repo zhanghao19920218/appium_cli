@@ -74,13 +74,22 @@ func (driver DeviceDriverModel) CloseSession() (serverErr *AppiumError) {
 	return
 }
 
-// FindElement Find the device element
-func (driver DeviceDriverModel) FindElement(param *FindElementParam) (elementId string, serverErr *AppiumError) {
+// FindElement
+//
+//	@Description: Find the element id
+//	@receiver driver
+//	@param param
+//	@return elementId
+//	@return serverErr
+func (driver DeviceDriverModel) FindElement(param *FindElementPoint) (elementId string, serverErr *AppiumError) {
 	var result ElementResponse
 
 	resp, err := driver.Client.R().
 		SetBody(param).
-		SetSuccessResult(&result).
+		SetSuccessResult(&FindElementParam{
+			Using: param.GetUsingType(),
+			Value: param.Value,
+		}).
 		Post(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/element", driver.Port, driver.SessionId))
 	if err != nil {
 		serverErr = &AppiumError{

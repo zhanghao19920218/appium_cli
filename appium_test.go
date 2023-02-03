@@ -30,9 +30,9 @@ func TestDeviceCapabilityModel_CreateSession(t *testing.T) {
 	}
 	fmt.Println(sessionId.SessionId)
 	// Find the element
-	elementId, err := sessionId.FindElement(&FindElementParam{
-		Using: "id",
-		Value: "com.iflytek.inputmethod.imehook:id/editText",
+	elementId, err := sessionId.FindElement(&FindElementPoint{
+		AppiumBy: ID,
+		Value:    "com.iflytek.inputmethod.imehook:id/editText",
 	})
 	if err != nil {
 		fmt.Println(err.Message)
@@ -41,11 +41,11 @@ func TestDeviceCapabilityModel_CreateSession(t *testing.T) {
 	fmt.Println(elementId)
 	sessionId.ActionElement(&ActionRequestParam{Element: elementId}, Click)
 	time.Sleep(1 * time.Second)
-	sessionId.TouchActionByLoc(&ActionChainParams{
-		X:        49,
-		Y:        1215,
-		Duration: 1,
-	})
+	//sessionId.TouchActionByLoc(&Coordinate{
+	//	X:        49,
+	//	Y:        1215,
+	//	Duration: 1,
+	//})
 	// Start the activity
 	sessionId.StartActivity(&StartActivityParam{
 		AppPackage:  "com.wechat",
