@@ -85,11 +85,11 @@ func (driver DeviceDriverModel) FindElement(param *FindElementPoint) (elementId 
 	var result ElementResponse
 
 	resp, err := driver.Client.R().
-		SetBody(param).
-		SetSuccessResult(&FindElementParam{
+		SetBody(&FindElementParam{
 			Using: param.GetUsingType(),
 			Value: param.Value,
 		}).
+		SetSuccessResult(&result).
 		Post(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/element", driver.Port, driver.SessionId))
 	if err != nil {
 		serverErr = &AppiumError{
