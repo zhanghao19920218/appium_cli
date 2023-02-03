@@ -3,7 +3,7 @@
 > This project just support golang appium(still in beta) 
 
 ## Installation
-> go get github.com/zhanghao19920218/appium_cli@v0.1.3
+> go get github.com/zhanghao19920218/appium_cli@v0.1.5
 
 ## Usage
 ```go
@@ -89,3 +89,18 @@ sessionId.StartActivity(&StartActivityParam{
 		AppActivity: "com.wechat",
 	})
 ```
+
+### FindElement
+
+> Find the element id by accessibility-id or id
+>
+> * `AppiumBy`: ID, AccessibilityID
+> * `Value`: String value
+
+```go
+elementId, err := session.FindElement(&FindElementPoint{
+		AppiumBy: ID,
+		Value:    "com.another.baidu:id/editText",
+	})
+```
+

@@ -32,7 +32,7 @@ func TestDeviceCapabilityModel_CreateSession(t *testing.T) {
 	// Find the element
 	elementId, err := sessionId.FindElement(&FindElementPoint{
 		AppiumBy: ID,
-		Value:    "com.iflytek.inputmethod.imehook:id/editText",
+		Value:    "com.another.baidu:id/editText",
 	})
 	if err != nil {
 		fmt.Println(err.Message)
