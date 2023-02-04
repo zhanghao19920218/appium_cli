@@ -104,3 +104,13 @@ elementId, err := session.FindElement(&FindElementPoint{
 	})
 ```
 
+### ImplicitWait
+
+> Set the amount of time the driver should wait when searching for elements
+>
+> * millisecond: wait for the seconds to find element. 
+
+```go
+session.ImplicitWait(seconds) // This is seconds to wait
+```
+

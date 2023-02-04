@@ -9,6 +9,7 @@ const (
 	ActionElementError
 	TouchActionError
 	StartActivityError
+	ImplicitWaitError
 	Others
 )
 

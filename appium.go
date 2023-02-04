@@ -2,6 +2,7 @@ package appium_cli
 
 import (
 	"fmt"
+	"time"
 )
 
 // CreateSession Create the appium new session to do the test, Get the screen size of device
@@ -217,6 +218,39 @@ func (driver DeviceDriverModel) StartActivity(param *StartActivityParam) (server
 		serverErr = &AppiumError{
 			Message:   "Start Activity Error",
 			ErrorCode: StartActivityError,
+		}
+		return
+	}
+	return
+}
+
+// ImplicitWait
+//
+//	@Description: Set the amount of time the driver should wait when searching for elements
+//	@receiver driver
+//	@param seconds
+//	@return serverErr
+func (driver DeviceDriverModel) ImplicitWait(seconds time.Duration) (serverErr *AppiumError) {
+	var result SessionResponse
+
+	resp, err := driver.Client.R().
+		SetBody(&ImplicitWaitParam{
+			Seconds: int(seconds),
+		}).
+		SetSuccessResult(&result).
+		Post(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/timeouts/implicit_wait", driver.Port, driver.SessionId))
+	if err != nil {
+		serverErr = &AppiumError{
+			Message:   "ImplicitWait Time Out",
+			ErrorCode: ImplicitWaitError,
+		}
+		return
+	}
+
+	if !resp.IsSuccessState() {
+		serverErr = &AppiumError{
+			Message:   "ImplicitWait Time Out",
+			ErrorCode: ImplicitWaitError,
 		}
 		return
 	}

@@ -172,3 +172,7 @@ type StartActivityParam struct {
 	AppPackage  string `json:"appPackage"`
 	AppActivity string `json:"appActivity"`
 }
+
+type ImplicitWaitParam struct {
+	Seconds int `json:"ms"`
+}
