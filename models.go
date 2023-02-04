@@ -92,6 +92,8 @@ type AppiumBy int64
 const (
 	AccessibilityID AppiumBy = iota
 	ID
+	XPath
+	UiSelector
 )
 
 // FindElementParam request post the parameters
@@ -113,8 +115,12 @@ type FindElementPoint struct {
 func (model *FindElementPoint) GetUsingType() string {
 	if model.AppiumBy == AccessibilityID {
 		return "accessibility id"
-	} else {
+	} else if model.AppiumBy == ID {
 		return "id"
+	} else if model.AppiumBy == XPath {
+		return "xpath"
+	} else {
+		return "-android uiautomator"
 	}
 }
 

@@ -3,7 +3,7 @@
 > This project just support golang appium(still in beta) 
 
 ## Installation
-> go get github.com/zhanghao19920218/appium_cli@v0.1.6
+> go get github.com/zhanghao19920218/appium_cli@v0.1.7
 
 ## Usage
 ```go
@@ -94,7 +94,7 @@ sessionId.StartActivity(&StartActivityParam{
 
 > Find the element id by accessibility-id or id
 >
-> * `AppiumBy`: ID, AccessibilityID
+> * `AppiumBy`: ID, AccessibilityID, Xpath, Selector
 > * `Value`: String value
 
 ```go
