@@ -235,7 +235,7 @@ func (driver DeviceDriverModel) ImplicitWait(seconds time.Duration) (serverErr *
 
 	resp, err := driver.Client.R().
 		SetBody(&ImplicitWaitParam{
-			Seconds: int(seconds),
+			Seconds: int(seconds / time.Millisecond),
 		}).
 		SetSuccessResult(&result).
 		Post(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/timeouts/implicit_wait", driver.Port, driver.SessionId))
@@ -254,5 +254,37 @@ func (driver DeviceDriverModel) ImplicitWait(seconds time.Duration) (serverErr *
 		}
 		return
 	}
+	return
+}
+
+// ElementActionMov
+//
+//		@Description: Clicks element at its center point. If the element's center point is obscured by another element,
+//		an element click intercepted error is returned. If the element is outside the viewport, an element not interactable
+//		error is returned. Not all drivers automatically scroll the element into view and may need to be scrolled to in order to interact with it.
+//		@receiver driver
+//		@param param the find way of the element
+//	 @param seconds the seconds to implicitWait
+//	 @param action take the action
+//		@return serverErr
+func (driver DeviceDriverModel) ElementActionMov(param *FindElementPoint, seconds time.Duration, action ActionType) (serverErr *AppiumError) {
+	// 1. Confirm to find element
+	if seconds != 0 {
+		serverErr = driver.ImplicitWait(seconds)
+	} else {
+		serverErr = driver.ImplicitWait(5)
+	}
+	if serverErr != nil {
+		return
+	}
+	// 2. Find the element
+	elementId, serverErr := driver.FindElement(param)
+	if serverErr != nil {
+		return
+	}
+	// 3. Touch or move the element
+	serverErr = driver.ActionElement(&ActionRequestParam{
+		Element: elementId,
+	}, action)
 	return
 }

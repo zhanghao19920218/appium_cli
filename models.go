@@ -176,3 +176,5 @@ type StartActivityParam struct {
 type ImplicitWaitParam struct {
 	Seconds int `json:"ms"`
 }
+
+// Attributes to make

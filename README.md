@@ -3,7 +3,7 @@
 > This project just support golang appium(still in beta) 
 
 ## Installation
-> go get github.com/zhanghao19920218/appium_cli@v0.1.7
+> go get github.com/zhanghao19920218/appium_cli@v0.1.9
 
 ## Usage
 ```go
@@ -112,5 +112,13 @@ elementId, err := session.FindElement(&FindElementPoint{
 
 ```go
 session.ImplicitWait(seconds) // This is seconds to wait
+```
+
+### ElementActionMov
+
+> Clicks element at its center point. If the element's center point is obscured by another element, an element click intercepted error is returned. If the element is outside the viewport, an element not interactable error is returned. Not all drivers automatically scroll the element into view and may need to be scrolled to in order to interact with it.
+
+```go
+session.ElementActionMov(param *FindElementPoint, seconds time.Duration, action ActionType)
 ```
 
