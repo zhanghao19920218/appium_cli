@@ -296,7 +296,13 @@ func (driver DeviceDriverModel) ElementActionMov(param *FindElementPoint, second
 //	@param param
 //	@param elementId
 //	@return serverErr
-func (driver DeviceDriverModel) GetAttribute(param *AttributeModel, elementId string) (value string, serverErr *AppiumError) {
+func (driver DeviceDriverModel) GetAttribute(param *AttributeModel, element *FindElementPoint) (value string, elementId string, serverErr *AppiumError) {
+	// 1. Find the element
+	elementId, serverErr = driver.FindElement(element)
+	if serverErr != nil {
+		return
+	}
+
 	var result SessionResponse
 
 	resp, err := driver.Client.R().
