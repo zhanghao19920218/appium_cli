@@ -307,7 +307,7 @@ func (driver DeviceDriverModel) GetAttribute(param *AttributeModel, element *Fin
 
 	resp, err := driver.Client.R().
 		SetSuccessResult(&result).
-		Get(fmt.Sprintf("127.0.0.1:%d/wd/hub/session/%s/element/%s/attribute/%s", driver.Port, driver.SessionId, elementId, param.GetAttributeStr()))
+		Get(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/element/%s/attribute/%s", driver.Port, driver.SessionId, elementId, param.GetAttributeStr()))
 	if err != nil {
 		serverErr = &AppiumError{
 			Message:   "Not Found the attribute",
