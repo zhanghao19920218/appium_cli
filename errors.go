@@ -10,6 +10,7 @@ const (
 	TouchActionError
 	StartActivityError
 	ImplicitWaitError
+	NotFoundAttribute
 	Others
 )
 

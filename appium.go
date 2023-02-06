@@ -267,7 +267,7 @@ func (driver DeviceDriverModel) ImplicitWait(seconds time.Duration) (serverErr *
 //	 @param seconds the seconds to implicitWait
 //	 @param action take the action
 //		@return serverErr
-func (driver DeviceDriverModel) ElementActionMov(param *FindElementPoint, seconds time.Duration, action ActionType) (serverErr *AppiumError) {
+func (driver DeviceDriverModel) ElementActionMov(param *FindElementPoint, seconds time.Duration, action ActionType) (elementId string, serverErr *AppiumError) {
 	// 1. Confirm to find element
 	if seconds != 0 {
 		serverErr = driver.ImplicitWait(seconds)
@@ -278,7 +278,7 @@ func (driver DeviceDriverModel) ElementActionMov(param *FindElementPoint, second
 		return
 	}
 	// 2. Find the element
-	elementId, serverErr := driver.FindElement(param)
+	elementId, serverErr = driver.FindElement(param)
 	if serverErr != nil {
 		return
 	}
@@ -286,5 +286,36 @@ func (driver DeviceDriverModel) ElementActionMov(param *FindElementPoint, second
 	serverErr = driver.ActionElement(&ActionRequestParam{
 		Element: elementId,
 	}, action)
+	return
+}
+
+// GetAttribute
+//
+//	@Description: Get the element attribute
+//	@receiver driver
+//	@param param
+//	@param elementId
+//	@return serverErr
+func (driver DeviceDriverModel) GetAttribute(param *AttributeModel, elementId string) (value string, serverErr *AppiumError) {
+	var result SessionResponse
+
+	resp, err := driver.Client.R().
+		SetSuccessResult(&result).
+		Get(fmt.Sprintf("127.0.0.1:%d/wd/hub/session/%s/element/%s/attribute/%s", driver.Port, driver.SessionId, elementId, param.GetAttributeStr()))
+	if err != nil {
+		serverErr = &AppiumError{
+			Message:   "Not Found the attribute",
+			ErrorCode: NotFoundAttribute,
+		}
+		return
+	}
+
+	if !resp.IsSuccessState() {
+		serverErr = &AppiumError{
+			Message:   "Not Found the attribute",
+			ErrorCode: NotFoundAttribute,
+		}
+		return
+	}
 	return
 }

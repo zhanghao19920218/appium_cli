@@ -177,4 +177,33 @@ type ImplicitWaitParam struct {
 	Seconds int `json:"ms"`
 }
 
-// Attributes to make
+// ElementAttributeType the attribute of element
+type ElementAttributeType int64
+
+const (
+	Checked ElementAttributeType = iota
+	Clickable
+	Enabled
+	Selected
+)
+
+type AttributeModel struct {
+	AttType ElementAttributeType
+}
+
+// GetAttributeStr
+//
+//	@Description: Get the using type
+//	@receiver model
+//	@return string
+func (model *AttributeModel) GetAttributeStr() string {
+	if model.AttType == Checked {
+		return "checked"
+	} else if model.AttType == Clickable {
+		return "clickable"
+	} else if model.AttType == Enabled {
+		return "enabled"
+	} else {
+		return "selected"
+	}
+}
