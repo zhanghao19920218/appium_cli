@@ -303,7 +303,7 @@ func (driver DeviceDriverModel) GetAttribute(param *AttributeModel, element *Fin
 		return
 	}
 
-	var result SessionResponse
+	var result AttributeResponse
 
 	resp, err := driver.Client.R().
 		SetSuccessResult(&result).
@@ -323,5 +323,6 @@ func (driver DeviceDriverModel) GetAttribute(param *AttributeModel, element *Fin
 		}
 		return
 	}
+	value = result.Value
 	return
 }

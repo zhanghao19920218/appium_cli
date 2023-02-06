@@ -30,6 +30,12 @@ type SessionResponse struct {
 	Value     DeviceInfoResponse `json:"value,omitempty"`
 }
 
+type AttributeResponse struct {
+	SessionId string `json:"sessionId"`
+	Status    int64  `json:"status"`
+	Value     string `json:"value,omitempty"`
+}
+
 type ValueErrorMsg struct {
 	Message string `json:"message"`
 }
