@@ -17,6 +17,7 @@ type ActionType int64
 // Different Action have different actions
 const (
 	Click ActionType = iota
+	SendKeys
 	Press
 )
 
@@ -143,6 +144,15 @@ type ElementValueModel struct {
 
 type ActionRequestParam struct {
 	Element string `json:"element"`
+}
+
+type SendKeysParam struct {
+	Text string `json:"text"`
+}
+
+type ActionNormalParam struct {
+	Element string
+	Text    string
 }
 
 type ActionChainParams struct {

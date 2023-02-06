@@ -112,13 +112,21 @@ func (driver DeviceDriverModel) FindElement(param *FindElementPoint) (elementId 
 }
 
 // ActionElement take action the device element
-func (driver DeviceDriverModel) ActionElement(elementParam *ActionRequestParam, action ActionType) (serverErr *AppiumError) {
+func (driver DeviceDriverModel) ActionElement(elementParam *ActionNormalParam, action ActionType) (serverErr *AppiumError) {
 	var result SessionResponse
-
+	var body any
+	var requestUrl string
+	if action == SendKeys {
+		body = &SendKeysParam{Text: elementParam.Text}
+		requestUrl = fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/element/%s/value", driver.Port, driver.SessionId, elementParam.Element)
+	} else {
+		requestUrl = fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/element/%s/click", driver.Port, driver.SessionId, elementParam.Element)
+		body = &ActionRequestParam{Element: elementParam.Element}
+	}
 	resp, err := driver.Client.R().
-		SetBody(elementParam).
+		SetBody(body).
 		SetSuccessResult(&result).
-		Post(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/element/%s/click", driver.Port, driver.SessionId, elementParam.Element))
+		Post(requestUrl)
 	if err != nil {
 		serverErr = &AppiumError{
 			Message:   "Action Element Error",
@@ -267,7 +275,7 @@ func (driver DeviceDriverModel) ImplicitWait(seconds time.Duration) (serverErr *
 //	 @param seconds the seconds to implicitWait
 //	 @param action take the action
 //		@return serverErr
-func (driver DeviceDriverModel) ElementActionMov(param *FindElementPoint, seconds time.Duration, action ActionType) (elementId string, serverErr *AppiumError) {
+func (driver DeviceDriverModel) ElementActionMov(param *FindElementPoint, seconds time.Duration, action ActionType, sendKeys string) (elementId string, serverErr *AppiumError) {
 	// 1. Confirm to find element
 	if seconds != 0 {
 		serverErr = driver.ImplicitWait(seconds)
@@ -283,8 +291,9 @@ func (driver DeviceDriverModel) ElementActionMov(param *FindElementPoint, second
 		return
 	}
 	// 3. Touch or move the element
-	serverErr = driver.ActionElement(&ActionRequestParam{
+	serverErr = driver.ActionElement(&ActionNormalParam{
 		Element: elementId,
+		Text:    sendKeys,
 	}, action)
 	return
 }
