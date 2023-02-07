@@ -1,56 +1,34 @@
 package appium_cli
 
 import (
-	"fmt"
 	"github.com/imroc/req/v3"
 	"testing"
-	"time"
 )
 
 func TestDeviceCapabilityModel_CreateSession(t *testing.T) {
 	session := &DeviceCapabilityModel{
 		Platform:              Android,
-		PlatformVersion:       "7.0.0",
-		DeviceName:            "192.168.58.101:5555",
-		AppPackage:            "com.wechat",
-		AppActivity:           "com.wechat",
-		NewCommandTimeout:     8000,
-		AndroidInstallTimeout: 10000,
+		PlatformVersion:       "9.0",
+		DeviceName:            "910KPGS2086327",
+		AppPackage:            "com.iflytek.inputmethod.imehook",
+		AppActivity:           "com.iflytek.inputmethod.imehook.MainActivity",
+		NewCommandTimeout:     80000,
+		AndroidInstallTimeout: 80000,
 		AutomationName:        "UiAutomator2",
 		SystemPort:            8002,
-		Udid:                  "192.168.58.101:5555",
+		Udid:                  "910KPGS2086327",
 		NoReset:               false,
 		Port:                  4001,
 		Client:                req.C(),
 	}
-	sessionId, err := session.CreateSession()
+	driver, err := session.CreateSession()
 	if err != nil {
-		fmt.Println(err.Message)
 		return
 	}
-	fmt.Println(sessionId.SessionId)
-	// Find the element
-	elementId, err := sessionId.FindElement(&FindElementPoint{
-		AppiumBy: ID,
-		Value:    "com.another.baidu:id/editText",
-	})
-	if err != nil {
-		fmt.Println(err.Message)
-		return
-	}
-	fmt.Println(elementId)
-	sessionId.ActionElement(&ActionRequestParam{Element: elementId}, Click)
-	time.Sleep(1 * time.Second)
-	//sessionId.TouchActionByLoc(&Coordinate{
-	//	X:        49,
-	//	Y:        1215,
-	//	Duration: 1,
-	//})
-	// Start the activity
-	sessionId.StartActivity(&StartActivityParam{
-		AppPackage:  "com.wechat",
-		AppActivity: "com.wechat",
+	driver.SetKeyboardType(&ImeKeyboardModel{
+		AppPackage:  "com.sohu.inputmethod.sogou",
+		AppActivity: ".SogouIME",
 	})
 	// Click the element
-	sessionId.CloseSession()
+	driver.CloseSession()
 }

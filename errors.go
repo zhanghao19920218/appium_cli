@@ -11,6 +11,9 @@ const (
 	StartActivityError
 	ImplicitWaitError
 	NotFoundAttribute
+	TerminalAppError
+	OsShellError
+	SetKeyboardError
 	Others
 )
 

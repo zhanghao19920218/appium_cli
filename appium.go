@@ -2,6 +2,8 @@ package appium_cli
 
 import (
 	"fmt"
+	sf "github.com/sa-/slicefunk"
+	"strings"
 	"time"
 )
 
@@ -47,9 +49,10 @@ func (capModel *DeviceCapabilityModel) CreateSession() (deviceModel *DeviceDrive
 		return
 	}
 	deviceModel = &DeviceDriverModel{
-		SessionId: result.SessionId,
-		Port:      capModel.Port,
-		Client:    client}
+		SessionId:  result.SessionId,
+		Port:       capModel.Port,
+		DeviceName: capModel.DeviceName,
+		Client:     client}
 	return
 }
 
@@ -333,5 +336,80 @@ func (driver DeviceDriverModel) GetAttribute(param *AttributeModel, element *Fin
 		return
 	}
 	value = &AttributeRetModel{Value: result.Value}
+	return
+}
+
+// TerminateApp terminate the application
+func (driver DeviceDriverModel) TerminateApp(appId string) (serverErr *AppiumError) {
+	var result SessionResponse
+	resp, err := driver.Client.R().
+		SetBody(&AppPropParam{
+			AppId: appId,
+		}).
+		SetSuccessResult(&result).
+		Post(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/appium/device/terminate_app", driver.Port, driver.SessionId))
+	if err != nil {
+		serverErr = &AppiumError{
+			Message:   "Terminate the app error",
+			ErrorCode: TerminalAppError,
+		}
+		return
+	}
+
+	if !resp.IsSuccessState() {
+		serverErr = &AppiumError{
+			Message:   "Terminate the app error",
+			ErrorCode: TerminalAppError,
+		}
+		return
+	}
+	return
+}
+
+// FindInputMethods Get the input-method
+func (driver DeviceDriverModel) FindInputMethods() (imeKeyboards []ImeKeyboardModel, err *AppiumError) {
+	args := []string{
+		"-s",
+		driver.DeviceName,
+		"shell",
+		"ime",
+		"list",
+		"-s",
+	}
+	out, err := GetOutPutString("adb", args)
+	if err != nil {
+		return
+	}
+	devices := strings.Split(strings.TrimSpace(out), "\n")
+	imeKeyboards = sf.Map(devices, func(item string) ImeKeyboardModel {
+		return StrConvertImeModel(item)
+	})
+	fmt.Println(imeKeyboards)
+	return
+}
+
+// SetKeyboardType Set the keyboard
+func (driver DeviceDriverModel) SetKeyboardType(imeKeyboard *ImeKeyboardModel) (err *AppiumError) {
+	args := []string{
+		"-s",
+		driver.DeviceName,
+		"shell",
+		"ime",
+		"enable",
+		imeKeyboard.ToString(),
+	}
+	err = NoOutPutString("adb", args)
+	if err != nil {
+		return
+	}
+	args = []string{
+		"-s",
+		driver.DeviceName,
+		"shell",
+		"ime",
+		"set",
+		imeKeyboard.ToString(),
+	}
+	err = NoOutPutString("adb", args)
 	return
 }

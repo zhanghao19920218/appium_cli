@@ -84,9 +84,10 @@ type AppiumParameter struct {
 }
 
 type DeviceDriverModel struct {
-	SessionId string
-	Client    *req.Client
-	Port      int64
+	SessionId  string
+	Client     *req.Client
+	Port       int64
+	DeviceName string
 }
 
 // AppiumBy
@@ -205,6 +206,10 @@ const (
 
 type AttributeModel struct {
 	AttType ElementAttributeType
+}
+
+type AppPropParam struct {
+	AppId string `json:"appId"`
 }
 
 // GetAttributeStr

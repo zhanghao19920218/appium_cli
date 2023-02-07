@@ -3,7 +3,7 @@
 > This project just support golang appium(still in beta) 
 
 ## Installation
-> go get github.com/zhanghao19920218/appium_cli@v0.1.12
+> go get github.com/zhanghao19920218/appium_cli@v0.1.17
 
 ## Usage
 ```go
@@ -122,3 +122,16 @@ session.ImplicitWait(seconds) // This is seconds to wait
 session.ElementActionMov(param *FindElementPoint, seconds time.Duration, action ActionType)
 ```
 
+### TerminateApp
+
+> Terminate the application
+>
+> * param appId: Android is app package
+
+### FindInputMethods
+
+> Find the keyboard input-methods return
+
+### SetKeyboardType
+
+> Set the keyboard, Like Google Keyboard Or Sogou Keyboard
