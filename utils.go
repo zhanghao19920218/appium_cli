@@ -1,7 +1,11 @@
 package appium_cli
 
 import (
+	"context"
+	"fmt"
 	"os/exec"
+	"strings"
+	"time"
 )
 
 func (platform PlatformType) ToString() string {
@@ -40,6 +44,35 @@ func NoOutPutString(commandShell string, commandList []string) (error *AppiumErr
 			ErrorCode: OsShellError,
 		}
 		return
+	}
+	return
+}
+
+// KillLoopCmd
+// @Note: this function can not kill subprocess, e,g
+// "python3 main.py"
+func KillLoopCmd(commandShell string, commandList []string) (ret bool, error *AppiumError) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	process := exec.CommandContext(ctx, commandShell, commandList...)
+
+	processOutBytes, _ := process.Output()
+
+	result := string(processOutBytes)
+
+	pingList := strings.Split(result, "\n")
+
+	if len(pingList) > 1 {
+		ret = true
+	}
+
+	//if err != nil {
+	//	return
+	//}
+
+	if ctx.Err() == context.DeadlineExceeded {
+		fmt.Println("Timeout")
 	}
 	return
 }

@@ -22,6 +22,7 @@ func TestDeviceCapabilityModel_CreateSession(t *testing.T) {
 		Client:                req.C(),
 	}
 	driver, err := session.CreateSession()
+	driver.GetNetworkStatus()
 	if err != nil {
 		return
 	}

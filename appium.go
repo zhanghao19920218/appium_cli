@@ -414,3 +414,55 @@ func (driver DeviceDriverModel) SetKeyboardType(imeKeyboard *ImeKeyboardModel) (
 	err = NoOutPutString("adb", args)
 	return
 }
+
+// GetNetworkStatus
+// Use the `adb shell ping` to get the network status
+func (driver DeviceDriverModel) GetNetworkStatus() (ret bool, err *AppiumError) {
+	args := []string{
+		"-s",
+		driver.DeviceName,
+		"shell",
+		"ping",
+		"www.baidu.com",
+	}
+	ret, err = KillLoopCmd("adb", args)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (driver DeviceDriverModel) GetElementText(element *FindElementPoint) (value AttributeInterface, elementId string, serverErr *AppiumError) {
+	serverErr = driver.ImplicitWait(2 * time.Second)
+	if serverErr != nil {
+		return
+	}
+	// 1. Find the element
+	elementId, serverErr = driver.FindElement(element)
+	if serverErr != nil {
+		return
+	}
+
+	var result AttributeResponse
+
+	resp, err := driver.Client.R().
+		SetSuccessResult(&result).
+		Get(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/element/%s/text", driver.Port, driver.SessionId, elementId))
+	if err != nil {
+		serverErr = &AppiumError{
+			Message:   "Not Found the text",
+			ErrorCode: NotFoundAttribute,
+		}
+		return
+	}
+
+	if !resp.IsSuccessState() {
+		serverErr = &AppiumError{
+			Message:   "Not Found the text",
+			ErrorCode: NotFoundAttribute,
+		}
+		return
+	}
+	value = &AttributeRetModel{Value: result.Value}
+	return
+}
