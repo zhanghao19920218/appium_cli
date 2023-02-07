@@ -228,3 +228,9 @@ func (model *AttributeModel) GetAttributeStr() string {
 		return "selected"
 	}
 }
+
+type TerminateResponse struct {
+	Value     bool   `json:"value"`
+	SessionId string `json:"sessionId"`
+	Status    int    `json:"status"`
+}

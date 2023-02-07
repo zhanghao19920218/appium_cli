@@ -340,8 +340,8 @@ func (driver DeviceDriverModel) GetAttribute(param *AttributeModel, element *Fin
 }
 
 // TerminateApp terminate the application
-func (driver DeviceDriverModel) TerminateApp(appId string) (serverErr *AppiumError) {
-	var result SessionResponse
+func (driver DeviceDriverModel) TerminateApp(appId string) (ret bool, serverErr *AppiumError) {
+	var result TerminateResponse
 	resp, err := driver.Client.R().
 		SetBody(&AppPropParam{
 			AppId: appId,
@@ -363,6 +363,7 @@ func (driver DeviceDriverModel) TerminateApp(appId string) (serverErr *AppiumErr
 		}
 		return
 	}
+	ret = result.Value
 	return
 }
 
