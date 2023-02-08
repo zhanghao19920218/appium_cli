@@ -14,6 +14,8 @@ const (
 	TerminalAppError
 	OsShellError
 	SetKeyboardError
+	GetContextsError
+	SetContextError
 	Others
 )
 

@@ -22,6 +22,7 @@ func (capModel *DeviceCapabilityModel) CreateSession() (deviceModel *DeviceDrive
 		SystemPort:            capModel.SystemPort,
 		Udid:                  capModel.Udid,
 		NoReset:               capModel.NoReset,
+		AutoWebview:           true,
 	}}
 	var result SessionResponse
 	var errorResult SessionErrorResponse
@@ -464,5 +465,63 @@ func (driver DeviceDriverModel) GetElementText(element *FindElementPoint) (value
 		return
 	}
 	value = &AttributeRetModel{Value: result.Value}
+	return
+}
+
+// GetAllContext
+//
+//	@Description: Get the context of devices
+//	@receiver driver
+//	@return ret
+//	@return serverErr
+func (driver DeviceDriverModel) GetAllContext() (ret []string, serverErr *AppiumError) {
+	var response GetContextResponse
+
+	resp, err := driver.Client.R().
+		SetSuccessResult(&response).
+		Get(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/contexts", driver.Port, driver.SessionId))
+	if err != nil {
+		serverErr = &AppiumError{
+			Message:   "Get context error",
+			ErrorCode: GetContextsError,
+		}
+		return
+	}
+
+	if !resp.IsSuccessState() {
+		serverErr = &AppiumError{
+			Message:   "Get ",
+			ErrorCode: GetContextsError,
+		}
+		return
+	}
+	ret = response.Value
+	return
+}
+
+func (driver DeviceDriverModel) SetContext(context string) (serverErr *AppiumError) {
+	var response SessionResponse
+
+	resp, err := driver.Client.R().
+		SetBody(&SetContextParam{
+			Name: context,
+		}).
+		SetSuccessResult(&response).
+		Post(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/context", driver.Port, driver.SessionId))
+	if err != nil {
+		serverErr = &AppiumError{
+			Message:   "Set context error",
+			ErrorCode: SetContextError,
+		}
+		return
+	}
+
+	if !resp.IsSuccessState() {
+		serverErr = &AppiumError{
+			Message:   "Set context error",
+			ErrorCode: SetContextError,
+		}
+		return
+	}
 	return
 }

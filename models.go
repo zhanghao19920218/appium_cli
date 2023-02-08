@@ -59,6 +59,7 @@ type DesiredCapabilities struct {
 	SystemPort            uint64 `json:"systemPort"`
 	Udid                  string `json:"udid"`
 	NoReset               bool   `json:"noReset"`
+	AutoWebview           bool   `json:"autoWebview"`
 	//App                   string `json:"app"`
 }
 
@@ -233,4 +234,14 @@ type TerminateResponse struct {
 	Value     bool   `json:"value"`
 	SessionId string `json:"sessionId"`
 	Status    int    `json:"status"`
+}
+
+type GetContextResponse struct {
+	Value     []string `json:"value"`
+	SessionId string   `json:"sessionId"`
+	Status    int      `json:"status"`
+}
+
+type SetContextParam struct {
+	Name string `json:"name"`
 }
