@@ -60,6 +60,7 @@ type DesiredCapabilities struct {
 	Udid                  string `json:"udid"`
 	NoReset               bool   `json:"noReset"`
 	AutoWebview           bool   `json:"autoWebview"`
+	ChromedriverExcutable string `json:"chromedriverExcutable"`
 	//App                   string `json:"app"`
 }
 
@@ -76,6 +77,7 @@ type DeviceCapabilityModel struct {
 	SystemPort            uint64 `json:"systemPort"`
 	Udid                  string `json:"udid"`
 	NoReset               bool   `json:"noReset"`
+	ChromedriverExcutable string `json:"chromedriverExcutable"`
 	Port                  int64
 	Client                *req.Client
 }
