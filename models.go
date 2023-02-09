@@ -202,6 +202,7 @@ const (
 	Checked ElementAttributeType = iota
 	Clickable
 	Enabled
+	Displayed
 	Selected
 )
 
@@ -225,6 +226,8 @@ func (model *AttributeModel) GetAttributeStr() string {
 		return "clickable"
 	} else if model.AttType == Enabled {
 		return "enabled"
+	} else if model.AttType == Displayed {
+		return "displayed"
 	} else {
 		return "selected"
 	}
