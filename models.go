@@ -59,7 +59,6 @@ type DesiredCapabilities struct {
 	SystemPort            uint64 `json:"systemPort"`
 	Udid                  string `json:"udid"`
 	NoReset               bool   `json:"noReset"`
-	AutoWebview           bool   `json:"autoWebview"`
 	//App                   string `json:"app"`
 }
 
