@@ -22,7 +22,6 @@ func (capModel *DeviceCapabilityModel) CreateSession() (deviceModel *DeviceDrive
 		SystemPort:            capModel.SystemPort,
 		Udid:                  capModel.Udid,
 		NoReset:               capModel.NoReset,
-		ChromedriverExcutable: capModel.ChromedriverExcutable,
 		AutoWebview:           true,
 	}}
 	var result SessionResponse

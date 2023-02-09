@@ -60,7 +60,6 @@ type DesiredCapabilities struct {
 	Udid                  string `json:"udid"`
 	NoReset               bool   `json:"noReset"`
 	AutoWebview           bool   `json:"autoWebview"`
-	ChromedriverExcutable string `json:"chromedriverExcutable"`
 	//App                   string `json:"app"`
 }
 
