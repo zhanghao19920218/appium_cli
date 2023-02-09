@@ -594,3 +594,34 @@ func (driver DeviceDriverModel) PressCode(codeNum int) (serverErr *AppiumError) 
 	}
 	return
 }
+
+func (driver DeviceDriverModel) OpenAirplaneMode(isOpen bool) (serverErr *AppiumError) {
+	var open int
+	if isOpen {
+		open = 1
+	} else {
+		open = 0
+	}
+	args := []string{
+		"-s",
+		driver.DeviceName,
+		"shell",
+		"su",
+		"-c",
+		fmt.Sprintf("'settings put global airplane_mode_on %d'", open),
+	}
+	serverErr = NoOutPutString("adb", args)
+	if serverErr != nil {
+		return
+	}
+	args = []string{
+		"-s",
+		driver.DeviceName,
+		"shell",
+		"su",
+		"-c",
+		"'am broadcast -a android.intent.action.AIRPLANE_MODE --ez state true'",
+	}
+	serverErr = NoOutPutString("adb", args)
+	return
+}
