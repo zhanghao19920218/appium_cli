@@ -16,6 +16,7 @@ const (
 	SetKeyboardError
 	GetContextsError
 	SetContextError
+	PressCodeError
 	Others
 )
 

@@ -524,3 +524,30 @@ func (driver DeviceDriverModel) SetContext(context string) (serverErr *AppiumErr
 	}
 	return
 }
+
+func (driver DeviceDriverModel) PressCode(codeNum int) (serverErr *AppiumError) {
+	var response SessionResponse
+
+	resp, err := driver.Client.R().
+		SetBody(&PressCodeParam{
+			KeyCode: codeNum,
+		}).
+		SetSuccessResult(&response).
+		Post(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/appium/device/press_keycode", driver.Port, driver.SessionId))
+	if err != nil {
+		serverErr = &AppiumError{
+			Message:   "Android Press Code Error",
+			ErrorCode: PressCodeError,
+		}
+		return
+	}
+
+	if !resp.IsSuccessState() {
+		serverErr = &AppiumError{
+			Message:   "Android Press Code Error",
+			ErrorCode: PressCodeError,
+		}
+		return
+	}
+	return
+}

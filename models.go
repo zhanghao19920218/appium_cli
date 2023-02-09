@@ -246,3 +246,7 @@ type GetContextResponse struct {
 type SetContextParam struct {
 	Name string `json:"name"`
 }
+
+type PressCodeParam struct {
+	KeyCode int `json:"keycode"`
+}
