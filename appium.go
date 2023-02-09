@@ -357,6 +357,31 @@ func (driver DeviceDriverModel) GetAttribute(param *AttributeModel, element *Fin
 	return
 }
 
+func (driver DeviceDriverModel) GetAttributeByElementId(param *AttributeModel, elementId string) (value AttributeInterface, serverErr *AppiumError) {
+	var result AttributeResponse
+
+	resp, err := driver.Client.R().
+		SetSuccessResult(&result).
+		Get(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/element/%s/attribute/%s", driver.Port, driver.SessionId, elementId, param.GetAttributeStr()))
+	if err != nil {
+		serverErr = &AppiumError{
+			Message:   "Not Found the attribute",
+			ErrorCode: NotFoundAttribute,
+		}
+		return
+	}
+
+	if !resp.IsSuccessState() {
+		serverErr = &AppiumError{
+			Message:   "Not Found the attribute",
+			ErrorCode: NotFoundAttribute,
+		}
+		return
+	}
+	value = &AttributeRetModel{Value: result.Value}
+	return
+}
+
 // TerminateApp terminate the application
 func (driver DeviceDriverModel) TerminateApp(appId string) (ret bool, serverErr *AppiumError) {
 	var result TerminateResponse
