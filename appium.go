@@ -301,6 +301,24 @@ func (driver DeviceDriverModel) ElementActionMov(param *FindElementPoint, second
 	return
 }
 
+func (driver DeviceDriverModel) WebViewElementAct(param *FindElementPoint, seconds time.Duration, action ActionType, sendKeys string) (elementId string, serverErr *AppiumError) {
+	time.Sleep(seconds)
+	if serverErr != nil {
+		return
+	}
+	// 2. Find the element
+	elementId, serverErr = driver.FindElement(param)
+	if serverErr != nil {
+		return
+	}
+	// 3. Touch or move the element
+	serverErr = driver.ActionElement(&ActionNormalParam{
+		Element: elementId,
+		Text:    sendKeys,
+	}, action)
+	return
+}
+
 // GetAttribute
 //
 //	@Description: Get the element attribute
