@@ -17,6 +17,8 @@ const (
 	GetContextsError
 	SetContextError
 	PressCodeError
+	RemoveAppError
+	InstallAppError
 	Others
 )
 

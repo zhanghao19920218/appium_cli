@@ -625,3 +625,59 @@ func (driver DeviceDriverModel) OpenAirplaneMode(isOpen bool) (serverErr *Appium
 	serverErr = NoOutPutString("adb", args)
 	return
 }
+
+// RemoveApp Remove an app from the device
+func (driver DeviceDriverModel) RemoveApp(appName string) (serverErr *AppiumError) {
+	var response SessionResponse
+
+	resp, err := driver.Client.R().
+		SetBody(&RemoveAppParam{
+			BundleId: appName,
+		}).
+		SetSuccessResult(&response).
+		Post(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/appium/device/remove_app", driver.Port, driver.SessionId))
+	if err != nil {
+		serverErr = &AppiumError{
+			Message:   "Uninstall app failure",
+			ErrorCode: RemoveAppError,
+		}
+		return
+	}
+
+	if !resp.IsSuccessState() {
+		serverErr = &AppiumError{
+			Message:   "Uninstall app failure",
+			ErrorCode: RemoveAppError,
+		}
+		return
+	}
+	return
+}
+
+// InstallApp Install the given app onto the device
+func (driver DeviceDriverModel) InstallApp(appPath string) (serverErr *AppiumError) {
+	var response SessionResponse
+
+	resp, err := driver.Client.R().
+		SetBody(&InstallAppParam{
+			AppPath: appPath,
+		}).
+		SetSuccessResult(&response).
+		Post(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/appium/device/install_app", driver.Port, driver.SessionId))
+	if err != nil {
+		serverErr = &AppiumError{
+			Message:   "Install app failure",
+			ErrorCode: InstallAppError,
+		}
+		return
+	}
+
+	if !resp.IsSuccessState() {
+		serverErr = &AppiumError{
+			Message:   "Install app failure",
+			ErrorCode: InstallAppError,
+		}
+		return
+	}
+	return
+}

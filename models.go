@@ -252,3 +252,11 @@ type SetContextParam struct {
 type PressCodeParam struct {
 	KeyCode int `json:"keycode"`
 }
+
+type RemoveAppParam struct {
+	BundleId string `json:"bundleId"`
+}
+
+type InstallAppParam struct {
+	AppPath string `json:"appPath"`
+}
