@@ -681,3 +681,85 @@ func (driver DeviceDriverModel) InstallApp(appPath string) (serverErr *AppiumErr
 	}
 	return
 }
+
+// IsAppInstall Check whether the specified app is installed on the device
+func (driver DeviceDriverModel) IsAppInstall(appName string) (serverErr *AppiumError) {
+	var response SessionResponse
+
+	resp, err := driver.Client.R().
+		SetBody(&RemoveAppParam{
+			BundleId: appName,
+		}).
+		SetSuccessResult(&response).
+		Post(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/appium/device/app_installed", driver.Port, driver.SessionId))
+	if err != nil {
+		serverErr = &AppiumError{
+			Message:   "Not found app",
+			ErrorCode: IsAppInstallError,
+		}
+		return
+	}
+
+	if !resp.IsSuccessState() {
+		serverErr = &AppiumError{
+			Message:   "Not found app",
+			ErrorCode: IsAppInstallError,
+		}
+		return
+	}
+	return
+}
+
+// HideKeyboard Hide soft keyboard
+func (driver DeviceDriverModel) HideKeyboard() (serverErr *AppiumError) {
+	var response SessionResponse
+
+	resp, err := driver.Client.R().
+		SetBody(&HideKeyboardParam{
+			Strategy: "default",
+		}).
+		SetSuccessResult(&response).
+		Post(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/appium/device/hide_keyboard", driver.Port, driver.SessionId))
+	if err != nil {
+		serverErr = &AppiumError{
+			Message:   "Not found app",
+			ErrorCode: IsAppInstallError,
+		}
+		return
+	}
+
+	if !resp.IsSuccessState() {
+		serverErr = &AppiumError{
+			Message:   "Not found app",
+			ErrorCode: IsAppInstallError,
+		}
+		return
+	}
+	return
+}
+
+// IsKeyboardShown Whether the soft keyboard is shown
+func (driver DeviceDriverModel) IsKeyboardShown() (ret bool, serverErr *AppiumError) {
+	var response TerminateResponse
+
+	resp, err := driver.Client.R().
+		SetSuccessResult(&response).
+		Get(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/appium/device/is_keyboard_shown", driver.Port, driver.SessionId))
+	if err != nil {
+		serverErr = &AppiumError{
+			Message:   "Is keyboard shown error",
+			ErrorCode: IsKeyboardShowError,
+		}
+		return
+	}
+
+	if !resp.IsSuccessState() {
+		serverErr = &AppiumError{
+			Message:   "Is keyboard shown error",
+			ErrorCode: IsKeyboardShowError,
+		}
+		return
+	}
+	ret = response.Value
+	return
+}

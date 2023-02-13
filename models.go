@@ -260,3 +260,7 @@ type RemoveAppParam struct {
 type InstallAppParam struct {
 	AppPath string `json:"appPath"`
 }
+
+type HideKeyboardParam struct {
+	Strategy string `json:"strategy"`
+}

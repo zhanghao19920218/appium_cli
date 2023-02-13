@@ -19,6 +19,8 @@ const (
 	PressCodeError
 	RemoveAppError
 	InstallAppError
+	IsAppInstallError
+	IsKeyboardShowError
 	Others
 )
 
