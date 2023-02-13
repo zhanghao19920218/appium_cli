@@ -683,8 +683,8 @@ func (driver DeviceDriverModel) InstallApp(appPath string) (serverErr *AppiumErr
 }
 
 // IsAppInstall Check whether the specified app is installed on the device
-func (driver DeviceDriverModel) IsAppInstall(appName string) (serverErr *AppiumError) {
-	var response SessionResponse
+func (driver DeviceDriverModel) IsAppInstall(appName string) (ret bool, serverErr *AppiumError) {
+	var response TerminateResponse
 
 	resp, err := driver.Client.R().
 		SetBody(&RemoveAppParam{
@@ -707,6 +707,7 @@ func (driver DeviceDriverModel) IsAppInstall(appName string) (serverErr *AppiumE
 		}
 		return
 	}
+	ret = response.Value
 	return
 }
 
