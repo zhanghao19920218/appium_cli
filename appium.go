@@ -764,3 +764,66 @@ func (driver DeviceDriverModel) IsKeyboardShown() (ret bool, serverErr *AppiumEr
 	ret = response.Value
 	return
 }
+
+// Scroll : scroll on the touch screen using finger based motion events
+func (driver DeviceDriverModel) Scroll(start Coordinate, end Coordinate) (serverErr *AppiumError) {
+	// Create the parameters
+	var actions []ActionRequestChain
+	actions = append(actions, ActionRequestChain{
+		Type:     "pointerMove",
+		Duration: start.GetDuration(),
+		X:        start.GetPosition().X,
+		Y:        start.GetPosition().Y,
+	})
+	actions = append(actions, ActionRequestChain{
+		Type:   "pointerDown",
+		Button: 0,
+	})
+	actions = append(actions, ActionRequestChain{
+		Type:     "pointerMove",
+		Duration: end.GetDuration(),
+		X:        end.GetPosition().X,
+		Y:        end.GetPosition().Y,
+		Origin:   "viewport",
+	})
+	actions = append(actions, ActionRequestChain{
+		Type:   "pointerUp",
+		Button: 0,
+	})
+	pointerParam := ActionRequestParams{
+		PointerType: "touch",
+	}
+	actionParam := ActionsRequest{
+		Actions:    actions,
+		Parameters: pointerParam,
+		Id:         "finger1",
+		Type:       "pointer",
+	}
+	var actionTemp []ActionsRequest
+	actionTemp = append(actionTemp, actionParam)
+	requestParams := &ActionRequestArr{
+		Actions: actionTemp,
+	}
+	var result SessionResponse
+
+	resp, err := driver.Client.R().
+		SetBody(requestParams).
+		SetSuccessResult(&result).
+		Post(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/actions", driver.Port, driver.SessionId))
+	if err != nil {
+		serverErr = &AppiumError{
+			Message:   "Scroll Action Error",
+			ErrorCode: ScrollError,
+		}
+		return
+	}
+
+	if !resp.IsSuccessState() {
+		serverErr = &AppiumError{
+			Message:   "Scroll Action Error",
+			ErrorCode: ScrollError,
+		}
+		return
+	}
+	return
+}

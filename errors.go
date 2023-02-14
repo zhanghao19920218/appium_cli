@@ -21,6 +21,7 @@ const (
 	InstallAppError
 	IsAppInstallError
 	IsKeyboardShowError
+	ScrollError
 	Others
 )
 

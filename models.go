@@ -168,6 +168,7 @@ type ActionRequestChain struct {
 	X        int64  `json:"x,omitempty"`
 	Y        int64  `json:"y,omitempty"`
 	Button   int64  `json:"button,omitempty"`
+	Origin   string `json:"origin,omitempty"`
 }
 
 type ActionRequestParams struct {
