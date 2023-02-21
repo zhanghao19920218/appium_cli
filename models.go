@@ -265,3 +265,7 @@ type InstallAppParam struct {
 type HideKeyboardParam struct {
 	Strategy string `json:"strategy"`
 }
+
+type ActivateAppParam struct {
+	AppId string `json:"appId"`
+}

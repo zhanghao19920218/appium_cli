@@ -827,3 +827,36 @@ func (driver DeviceDriverModel) Scroll(start Coordinate, end Coordinate) (server
 	}
 	return
 }
+
+// ActivateApp
+//
+//	@Description: Activate app by appid
+//	@receiver driver
+//	@param appId
+//	@return serverErr
+func (driver DeviceDriverModel) ActivateApp(appId string) (serverErr *AppiumError) {
+	var response SessionResponse
+
+	resp, err := driver.Client.R().
+		SetBody(&ActivateAppParam{
+			AppId: appId,
+		}).
+		SetSuccessResult(&response).
+		Post(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/appium/device/activate_app", driver.Port, driver.SessionId))
+	if err != nil {
+		serverErr = &AppiumError{
+			Message:   "Activate app failure",
+			ErrorCode: ActivateAppError,
+		}
+		return
+	}
+
+	if !resp.IsSuccessState() {
+		serverErr = &AppiumError{
+			Message:   "Activate app failure",
+			ErrorCode: ActivateAppError,
+		}
+		return
+	}
+	return
+}
