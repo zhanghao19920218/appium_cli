@@ -939,7 +939,7 @@ func (driver DeviceDriverModel) ActivateImeBoard(ime string) (serverErr *AppiumE
 			Engine: ime,
 		}).
 		SetSuccessResult(&response).
-		Post(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/ime/active_engine", driver.Port, driver.SessionId))
+		Post(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/ime/activate", driver.Port, driver.SessionId))
 	if err != nil {
 		serverErr = &AppiumError{
 			Message:   "Available ime error",
