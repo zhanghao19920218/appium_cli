@@ -23,6 +23,8 @@ const (
 	IsKeyboardShowError
 	ScrollError
 	ActivateAppError
+	AvailableImeError
+	ActivateImeError
 	Others
 )
 

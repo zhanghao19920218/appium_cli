@@ -269,3 +269,7 @@ type HideKeyboardParam struct {
 type ActivateAppParam struct {
 	AppId string `json:"appId"`
 }
+
+type ImeSearchParam struct {
+	Engine string `json:"engine"`
+}

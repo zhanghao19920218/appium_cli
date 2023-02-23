@@ -860,3 +860,100 @@ func (driver DeviceDriverModel) ActivateApp(appId string) (serverErr *AppiumErro
 	}
 	return
 }
+
+// GetAvailableIme
+//
+//	@Description: **Android only** show the available input-methods on the devices
+//	@receiver driver
+//	@return imeKeyboards
+//	@return serverErr
+func (driver DeviceDriverModel) GetAvailableIme() (imeKeyboards []string, serverErr *AppiumError) {
+	var response GetContextResponse
+
+	resp, err := driver.Client.R().
+		SetSuccessResult(&response).
+		Get(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/ime/available_engines", driver.Port, driver.SessionId))
+	if err != nil {
+		serverErr = &AppiumError{
+			Message:   "Available ime error",
+			ErrorCode: AvailableImeError,
+		}
+		return
+	}
+
+	if !resp.IsSuccessState() {
+		serverErr = &AppiumError{
+			Message:   "Available ime error",
+			ErrorCode: AvailableImeError,
+		}
+		return
+	}
+
+	imeKeyboards = response.Value
+	return
+}
+
+// GetActiveIme
+//
+//	@Description: Get the active input-method activity and package name
+//	@receiver driver
+//	@return imeKeyboard
+//	@return serverErr
+func (driver DeviceDriverModel) GetActiveIme() (imeKeyboard string, serverErr *AppiumError) {
+	var response AttributeResponse
+
+	resp, err := driver.Client.R().
+		SetSuccessResult(&response).
+		Get(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/ime/active_engine", driver.Port, driver.SessionId))
+	if err != nil {
+		serverErr = &AppiumError{
+			Message:   "Available ime error",
+			ErrorCode: AvailableImeError,
+		}
+		return
+	}
+
+	if !resp.IsSuccessState() {
+		serverErr = &AppiumError{
+			Message:   "Available ime error",
+			ErrorCode: AvailableImeError,
+		}
+		return
+	}
+
+	imeKeyboard = response.Value
+	return
+}
+
+// ActivateImeBoard
+//
+//	@Description: Activate the input-method
+//	@receiver driver
+//	@param ime
+//	@return serverErr
+func (driver DeviceDriverModel) ActivateImeBoard(ime string) (serverErr *AppiumError) {
+	var response SessionResponse
+
+	resp, err := driver.Client.R().
+		SetBody(&ImeSearchParam{
+			Engine: ime,
+		}).
+		SetSuccessResult(&response).
+		Post(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/ime/active_engine", driver.Port, driver.SessionId))
+	if err != nil {
+		serverErr = &AppiumError{
+			Message:   "Available ime error",
+			ErrorCode: ActivateImeError,
+		}
+		return
+	}
+
+	if !resp.IsSuccessState() {
+		serverErr = &AppiumError{
+			Message:   "Available ime error",
+			ErrorCode: ActivateImeError,
+		}
+		return
+	}
+	return
+}
