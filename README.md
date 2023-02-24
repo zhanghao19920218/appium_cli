@@ -3,7 +3,7 @@
 > This project just support golang appium(still in beta) 
 
 ## Installation
-> go get github.com/zhanghao19920218/appium_cli@v0.1.38
+> go get github.com/zhanghao19920218/appium_cli@v0.1.41
 
 ## Usage
 ```go

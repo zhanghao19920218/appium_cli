@@ -957,3 +957,35 @@ func (driver DeviceDriverModel) ActivateImeBoard(ime string) (serverErr *AppiumE
 	}
 	return
 }
+
+// GetCurrentPackage
+//
+//	@Description: Get the current package name
+//	@receiver driver
+//	@return packageName
+//	@return serverErr
+func (driver DeviceDriverModel) GetCurrentPackage() (packageName string, serverErr *AppiumError) {
+	var response AttributeResponse
+
+	resp, err := driver.Client.R().
+		SetSuccessResult(&response).
+		Get(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/appium/device/current_package", driver.Port, driver.SessionId))
+	if err != nil {
+		serverErr = &AppiumError{
+			Message:   "Get package name error",
+			ErrorCode: GetPackageNameError,
+		}
+		return
+	}
+
+	if !resp.IsSuccessState() {
+		serverErr = &AppiumError{
+			Message:   "Get package name error",
+			ErrorCode: GetPackageNameError,
+		}
+		return
+	}
+
+	packageName = response.Value
+	return
+}

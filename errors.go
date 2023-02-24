@@ -25,6 +25,7 @@ const (
 	ActivateAppError
 	AvailableImeError
 	ActivateImeError
+	GetPackageNameError
 	Others
 )
 
