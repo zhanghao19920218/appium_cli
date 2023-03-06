@@ -140,6 +140,12 @@ type ElementResponse struct {
 	Value     ElementValueModel `json:"value"`
 }
 
+type ElementsResponse struct {
+	SessionId string              `json:"sessionId"`
+	Status    int64               `json:"status"`
+	Value     []ElementValueModel `json:"value"`
+}
+
 type ElementValueModel struct {
 	ELEMENT string `json:"ELEMENT"`
 }

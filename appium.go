@@ -114,6 +114,37 @@ func (driver DeviceDriverModel) FindElement(param *FindElementPoint) (elementId 
 	return
 }
 
+func (driver DeviceDriverModel) FindElements(param *FindElementPoint) (elementId []string, serverErr *AppiumError) {
+	var result ElementsResponse
+
+	resp, err := driver.Client.R().
+		SetBody(&FindElementParam{
+			Using: param.GetUsingType(),
+			Value: param.Value,
+		}).
+		SetSuccessResult(&result).
+		Post(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/elements", driver.Port, driver.SessionId))
+	if err != nil {
+		serverErr = &AppiumError{
+			Message:   "Find Element Error",
+			ErrorCode: NotFoundElement,
+		}
+		return
+	}
+
+	if !resp.IsSuccessState() {
+		serverErr = &AppiumError{
+			Message:   "Create Session Error",
+			ErrorCode: NotFoundElement,
+		}
+		return
+	}
+	elementId = sf.Map(result.Value, func(item ElementValueModel) string {
+		return item.ELEMENT
+	})
+	return
+}
+
 // ActionElement take action the device element
 func (driver DeviceDriverModel) ActionElement(elementParam *ActionNormalParam, action ActionType) (serverErr *AppiumError) {
 	var result SessionResponse
