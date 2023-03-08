@@ -541,6 +541,32 @@ func (driver DeviceDriverModel) GetElementText(element *FindElementPoint) (value
 	return
 }
 
+func (driver DeviceDriverModel) GetElementTextByElementId(elementId string) (value string, serverErr *AppiumError) {
+
+	var result AttributeResponse
+
+	resp, err := driver.Client.R().
+		SetSuccessResult(&result).
+		Get(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/element/%s/text", driver.Port, driver.SessionId, elementId))
+	if err != nil {
+		serverErr = &AppiumError{
+			Message:   "Not Found the text",
+			ErrorCode: NotFoundAttribute,
+		}
+		return
+	}
+
+	if !resp.IsSuccessState() {
+		serverErr = &AppiumError{
+			Message:   "Not Found the text",
+			ErrorCode: NotFoundAttribute,
+		}
+		return
+	}
+	value = result.Value
+	return
+}
+
 // GetAllContext
 //
 //	@Description: Get the context of devices
