@@ -543,7 +543,7 @@ func (driver DeviceDriverModel) GetElementText(element *FindElementPoint) (value
 
 func (driver DeviceDriverModel) GetElementTextByElementId(elementId string) (value string, serverErr *AppiumError) {
 
-	var result AttributeResponse
+	var result TextResponseValue
 
 	resp, err := driver.Client.R().
 		SetSuccessResult(&result).

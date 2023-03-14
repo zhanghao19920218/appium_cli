@@ -37,6 +37,11 @@ type AttributeResponse struct {
 	Value     string `json:"value,omitempty"`
 }
 
+type TextResponseValue struct {
+	SessionId string `json:"sessionId"`
+	Value     string `json:"value,omitempty"`
+}
+
 type ValueErrorMsg struct {
 	Message string `json:"message"`
 }
