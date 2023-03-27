@@ -1051,3 +1051,80 @@ func (driver DeviceDriverModel) GetCurrentPackage() (packageName string, serverE
 	packageName = response.Value
 	return
 }
+
+// ActionChainsMove
+//
+//	@Description: Slide multi pointers
+//	@receiver driver
+//	@param coordinates
+//	@return serverErr
+func (driver DeviceDriverModel) ActionChainsMove(coordinates []Coordinate) (serverErr *AppiumError) {
+	var actions []ActionRequestChain
+	if len(coordinates) <= 1 {
+		serverErr = &AppiumError{
+			Message:   "Slide mode just one type",
+			ErrorCode: 0,
+		}
+		return
+	}
+	actions = append(actions, ActionRequestChain{
+		Type:     "pointerMove",
+		Duration: 0,
+		X:        coordinates[0].GetPosition().X,
+		Y:        coordinates[1].GetPosition().Y,
+	})
+	actions = append(actions, ActionRequestChain{
+		Type:   "pointerDown",
+		Button: 0,
+	})
+	tmpCoordinates := coordinates[1:]
+	for _, position := range tmpCoordinates {
+		actions = append(actions, ActionRequestChain{
+			Type:     "pointerMove",
+			Duration: position.GetDuration(),
+			X:        position.GetPosition().X,
+			Y:        position.GetPosition().Y,
+		})
+	}
+	actions = append(actions, ActionRequestChain{
+		Type:   "pointerUp",
+		Button: 0,
+	})
+	pointerParam := ActionRequestParams{
+		PointerType: "touch",
+	}
+	actionParam := ActionsRequest{
+		Actions:    actions,
+		Parameters: pointerParam,
+		Id:         "finger1",
+		Type:       "pointer",
+	}
+
+	var actionTemp []ActionsRequest
+	actionTemp = append(actionTemp, actionParam)
+	requestParams := &ActionRequestArr{
+		Actions: actionTemp,
+	}
+	var result SessionResponse
+
+	resp, err := driver.Client.R().
+		SetBody(requestParams).
+		SetSuccessResult(&result).
+		Post(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/actions", driver.Port, driver.SessionId))
+	if err != nil {
+		serverErr = &AppiumError{
+			Message:   "Touch Action Error",
+			ErrorCode: TouchActionError,
+		}
+		return
+	}
+
+	if !resp.IsSuccessState() {
+		serverErr = &AppiumError{
+			Message:   "Touch Action Error",
+			ErrorCode: TouchActionError,
+		}
+		return
+	}
+	return
+}
