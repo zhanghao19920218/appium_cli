@@ -1071,7 +1071,7 @@ func (driver DeviceDriverModel) ActionChainsMove(coordinates []Coordinate) (serv
 		Type:     "pointerMove",
 		Duration: 0,
 		X:        coordinates[0].GetPosition().X,
-		Y:        coordinates[1].GetPosition().Y,
+		Y:        coordinates[0].GetPosition().Y,
 	})
 	actions = append(actions, ActionRequestChain{
 		Type:   "pointerDown",
