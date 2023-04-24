@@ -1165,8 +1165,17 @@ func (driver DeviceDriverModel) GrantAllPermission(packageName string) (serverEr
 		"pm",
 		"grant",
 		packageName,
-		"android.permission.READ_EXTERNAL_STORAGE",
 		"android.permission.WRITE_EXTERNAL_STORAGE",
+	}
+	serverErr = NoOutPutString("adb", args)
+	args = []string{
+		"-s",
+		driver.DeviceName,
+		"shell",
+		"pm",
+		"grant",
+		packageName,
+		"android.permission.READ_EXTERNAL_STORAGE",
 	}
 	serverErr = NoOutPutString("adb", args)
 	if serverErr != nil {
