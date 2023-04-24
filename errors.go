@@ -26,6 +26,7 @@ const (
 	AvailableImeError
 	ActivateImeError
 	GetPackageNameError
+	GetScreenShotError
 	Others
 )
 

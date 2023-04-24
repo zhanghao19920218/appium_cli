@@ -1128,3 +1128,49 @@ func (driver DeviceDriverModel) ActionChainsMove(coordinates []Coordinate) (serv
 	}
 	return
 }
+
+// ScreenShot gets a screenshot of the current device state. The returned image is in Base64 encoding.
+// Returns the image and an error if failed.
+func (driver DeviceDriverModel) ScreenShot() (imageBase64 string, serverErr *AppiumError) {
+	var response TextResponseValue
+
+	resp, err := driver.Client.R().
+		SetSuccessResult(&response).
+		Get(fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/screenshot", driver.Port, driver.SessionId))
+	if err != nil {
+		serverErr = &AppiumError{
+			Message:   "Get screen shot error",
+			ErrorCode: GetScreenShotError,
+		}
+		return
+	}
+
+	if !resp.IsSuccessState() {
+		serverErr = &AppiumError{
+			Message:   "Get screen shot error",
+			ErrorCode: GetScreenShotError,
+		}
+		return
+	}
+
+	imageBase64 = response.Value
+	return
+}
+
+func (driver DeviceDriverModel) GrantAllPermission(packageName string) (serverErr *AppiumError) {
+	args := []string{
+		"-s",
+		driver.DeviceName,
+		"shell",
+		"pm",
+		"grant",
+		packageName,
+		"android.permission.READ_EXTERNAL_STORAGE",
+		"android.permission.WRITE_EXTERNAL_STORAGE",
+	}
+	serverErr = NoOutPutString("adb", args)
+	if serverErr != nil {
+		return
+	}
+	return
+}
