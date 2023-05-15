@@ -83,7 +83,7 @@ func GetAdbPath() string {
 		adbPath, err := exec.LookPath("adb")
 		if err != nil {
 			fmt.Println("找不到 adb 命令：", err)
-			return "adb"
+			return "D:\\AndroidSDK\\android-sdk_r24.4.1-windows\\android-sdk_r24.4.1-windows\\android-sdk-windows\\platform-tools\\adb.exe"
 		}
 		return adbPath
 	}
