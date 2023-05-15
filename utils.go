@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os/exec"
+	"runtime"
 	"strings"
 	"time"
 )
@@ -75,4 +76,16 @@ func KillLoopCmd(commandShell string, commandList []string) (ret bool, error *Ap
 		fmt.Println("Timeout")
 	}
 	return
+}
+
+func GetAdbPath() string {
+	if runtime.GOOS == "windows" {
+		adbPath, err := exec.LookPath("adb")
+		if err != nil {
+			fmt.Println("找不到 adb 命令：", err)
+			return "adb"
+		}
+		return adbPath
+	}
+	return "adb"
 }

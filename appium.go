@@ -451,7 +451,7 @@ func (driver DeviceDriverModel) FindInputMethods() (imeKeyboards []ImeKeyboardMo
 		"list",
 		"-s",
 	}
-	out, err := GetOutPutString("adb", args)
+	out, err := GetOutPutString(GetAdbPath(), args)
 	if err != nil {
 		return
 	}
@@ -473,7 +473,7 @@ func (driver DeviceDriverModel) SetKeyboardType(imeKeyboard *ImeKeyboardModel) (
 		"enable",
 		imeKeyboard.ToString(),
 	}
-	err = NoOutPutString("adb", args)
+	err = NoOutPutString(GetAdbPath(), args)
 	if err != nil {
 		return
 	}
@@ -485,7 +485,7 @@ func (driver DeviceDriverModel) SetKeyboardType(imeKeyboard *ImeKeyboardModel) (
 		"set",
 		imeKeyboard.ToString(),
 	}
-	err = NoOutPutString("adb", args)
+	err = NoOutPutString(GetAdbPath(), args)
 	return
 }
 
@@ -499,7 +499,7 @@ func (driver DeviceDriverModel) GetNetworkStatus() (ret bool, err *AppiumError) 
 		"ping",
 		"www.baidu.com",
 	}
-	ret, err = KillLoopCmd("adb", args)
+	ret, err = KillLoopCmd(GetAdbPath(), args)
 	if err != nil {
 		return
 	}
@@ -672,7 +672,7 @@ func (driver DeviceDriverModel) OpenAirplaneMode(isOpen bool) (serverErr *Appium
 		"airplane_mode_on",
 		fmt.Sprintf("%d", open),
 	}
-	serverErr = NoOutPutString("adb", args)
+	serverErr = NoOutPutString(GetAdbPath(), args)
 	if serverErr != nil {
 		return
 	}
@@ -684,7 +684,7 @@ func (driver DeviceDriverModel) OpenAirplaneMode(isOpen bool) (serverErr *Appium
 		"-c",
 		fmt.Sprintf("'am broadcast -a android.intent.action.AIRPLANE_MODE --ez state %s'", isOpenStr),
 	}
-	serverErr = NoOutPutString("adb", args)
+	serverErr = NoOutPutString(GetAdbPath(), args)
 	return
 }
 
@@ -1167,7 +1167,7 @@ func (driver DeviceDriverModel) GrantAllPermission(packageName string) (serverEr
 		packageName,
 		"android.permission.WRITE_EXTERNAL_STORAGE",
 	}
-	serverErr = NoOutPutString("adb", args)
+	serverErr = NoOutPutString(GetAdbPath(), args)
 	args = []string{
 		"-s",
 		driver.DeviceName,
@@ -1177,7 +1177,7 @@ func (driver DeviceDriverModel) GrantAllPermission(packageName string) (serverEr
 		packageName,
 		"android.permission.READ_EXTERNAL_STORAGE",
 	}
-	serverErr = NoOutPutString("adb", args)
+	serverErr = NoOutPutString(GetAdbPath(), args)
 	if serverErr != nil {
 		return
 	}
