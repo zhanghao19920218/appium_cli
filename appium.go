@@ -653,26 +653,33 @@ func (driver DeviceDriverModel) PressCode(codeNum int) (serverErr *AppiumError) 
 }
 
 func (driver DeviceDriverModel) OpenAirplaneMode(isOpen bool) (serverErr *AppiumError) {
-	var open int
+	//var open int
 	var isOpenStr string
 	if isOpen {
-		open = 1
-		isOpenStr = "true"
+		//open = 1
+		isOpenStr = "enable"
 	} else {
-		open = 0
-		isOpenStr = "false"
+		//open = 0
+		isOpenStr = "disable"
 	}
 	args := []string{
 		"-s",
 		driver.DeviceName,
 		"shell",
-		"settings",
-		"put",
-		"global",
-		"airplane_mode_on",
-		fmt.Sprintf("%d", open),
+		"svc",
+		"data",
+		isOpenStr,
+	}
+	args2 := []string{
+		"-s",
+		driver.DeviceName,
+		"shell",
+		"svc",
+		"wifi",
+		isOpenStr,
 	}
 	serverErr = NoOutPutString(GetAdbPath(), args)
+	serverErr = NoOutPutString(GetAdbPath(), args2)
 	if serverErr != nil {
 		return
 	}
