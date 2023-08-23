@@ -657,10 +657,10 @@ func (driver DeviceDriverModel) OpenAirplaneMode(isOpen bool) (serverErr *Appium
 	var isOpenStr string
 	if isOpen {
 		//open = 1
-		isOpenStr = "enable"
+		isOpenStr = "disable"
 	} else {
 		//open = 0
-		isOpenStr = "disable"
+		isOpenStr = "enable"
 	}
 	args := []string{
 		"-s",
