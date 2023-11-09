@@ -215,6 +215,7 @@ const (
 	Clickable
 	Enabled
 	Displayed
+	Text
 	Selected
 )
 
@@ -240,6 +241,8 @@ func (model *AttributeModel) GetAttributeStr() string {
 		return "enabled"
 	} else if model.AttType == Displayed {
 		return "displayed"
+	} else if model.AttType == Text {
+		return "text"
 	} else {
 		return "selected"
 	}
