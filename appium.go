@@ -445,7 +445,7 @@ func (driver DeviceDriverModel) TerminateApp(appId string) (ret bool, serverErr 
 }
 
 func (driver DeviceDriverModel) ClearText(element *FindElementPoint) (serverErr *AppiumError) {
-	serverErr = driver.ImplicitWait(500 * time.Second)
+	serverErr = driver.ImplicitWait(500 * time.Millisecond)
 	if serverErr != nil {
 		return
 	}
@@ -454,6 +454,7 @@ func (driver DeviceDriverModel) ClearText(element *FindElementPoint) (serverErr 
 	if serverErr != nil {
 		return
 	}
+	time.Sleep(300 * time.Millisecond)
 	serverErr = driver.ActionElement(&ActionNormalParam{
 		Element: elementId,
 		Text:    "",
