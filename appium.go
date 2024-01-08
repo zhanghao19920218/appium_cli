@@ -444,8 +444,24 @@ func (driver DeviceDriverModel) TerminateApp(appId string) (ret bool, serverErr 
 	return
 }
 
-func (driver DeviceDriverModel) ClearText() {
-
+func (driver DeviceDriverModel) ClearText(element *FindElementPoint) (serverErr *AppiumError) {
+	serverErr = driver.ImplicitWait(500 * time.Second)
+	if serverErr != nil {
+		return
+	}
+	// 1. Find the element
+	elementId, serverErr := driver.FindElement(element)
+	if serverErr != nil {
+		return
+	}
+	serverErr = driver.ActionElement(&ActionNormalParam{
+		Element: elementId,
+		Text:    "",
+	}, Clear)
+	if serverErr != nil {
+		return
+	}
+	return
 }
 
 // FindInputMethods Get the input-method
