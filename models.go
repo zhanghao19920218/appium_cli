@@ -19,6 +19,7 @@ const (
 	Click ActionType = iota
 	SendKeys
 	Press
+	Clear
 )
 
 type DeviceInfoResponse struct {

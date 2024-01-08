@@ -153,6 +153,9 @@ func (driver DeviceDriverModel) ActionElement(elementParam *ActionNormalParam, a
 	if action == SendKeys {
 		body = &SendKeysParam{Text: elementParam.Text}
 		requestUrl = fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/element/%s/value", driver.Port, driver.SessionId, elementParam.Element)
+	} else if action == Clear {
+		body = &SendKeysParam{Text: elementParam.Text}
+		requestUrl = fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/element/%s/clear", driver.Port, driver.SessionId, elementParam.Element)
 	} else {
 		requestUrl = fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/element/%s/click", driver.Port, driver.SessionId, elementParam.Element)
 		body = &ActionRequestParam{Element: elementParam.Element}
@@ -439,6 +442,10 @@ func (driver DeviceDriverModel) TerminateApp(appId string) (ret bool, serverErr 
 	}
 	ret = result.Value
 	return
+}
+
+func (driver DeviceDriverModel) ClearText() {
+
 }
 
 // FindInputMethods Get the input-method
