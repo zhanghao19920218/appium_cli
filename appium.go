@@ -146,7 +146,7 @@ func (driver DeviceDriverModel) FindElements(param *FindElementPoint) (elementId
 }
 
 // ActionElement take action the device element
-func (driver DeviceDriverModel) ActionElement(elementParam *ActionNormalParam, action ActionType) (serverErr *AppiumError) {
+func (driver DeviceDriverModel) ActionElement(elementParam *ActionNormalParam, action ActionType) (pressTime int64, serverErr *AppiumError) {
 	var result SessionResponse
 	var body any
 	var requestUrl string
@@ -160,6 +160,9 @@ func (driver DeviceDriverModel) ActionElement(elementParam *ActionNormalParam, a
 		requestUrl = fmt.Sprintf("http://127.0.0.1:%d/wd/hub/session/%s/element/%s/click", driver.Port, driver.SessionId, elementParam.Element)
 		body = &ActionRequestParam{Element: elementParam.Element}
 	}
+	now := time.Now()
+	// 将当前时间转换为从1970年开始的毫秒数
+	pressTime = now.UnixMilli()
 	resp, err := driver.Client.R().
 		SetBody(body).
 		SetSuccessResult(&result).
@@ -328,7 +331,40 @@ func (driver DeviceDriverModel) ElementActionMov(param *FindElementPoint, second
 		return
 	}
 	// 3. Touch or move the element
-	serverErr = driver.ActionElement(&ActionNormalParam{
+	_, serverErr = driver.ActionElement(&ActionNormalParam{
+		Element: elementId,
+		Text:    sendKeys,
+	}, action)
+	return
+}
+
+// ElementActionWithTime
+//
+//	@Description: Element action with time
+//	@receiver driver
+//	@param param
+//	@param seconds
+//	@param action
+//	@param sendKeys
+//	@return elementId
+//	@return serverErr
+func (driver DeviceDriverModel) ElementActionWithTime(param *FindElementPoint, seconds time.Duration, action ActionType, sendKeys string) (actionTime int64, elementId string, serverErr *AppiumError) {
+	// 1. Confirm to find element
+	if seconds != 0 {
+		serverErr = driver.ImplicitWait(seconds)
+	} else {
+		serverErr = driver.ImplicitWait(5)
+	}
+	if serverErr != nil {
+		return
+	}
+	// 2. Find the element
+	elementId, serverErr = driver.FindElement(param)
+	if serverErr != nil {
+		return
+	}
+	// 3. Touch or move the element
+	actionTime, serverErr = driver.ActionElement(&ActionNormalParam{
 		Element: elementId,
 		Text:    sendKeys,
 	}, action)
@@ -346,7 +382,7 @@ func (driver DeviceDriverModel) WebViewElementAct(param *FindElementPoint, secon
 		return
 	}
 	// 3. Touch or move the element
-	serverErr = driver.ActionElement(&ActionNormalParam{
+	_, serverErr = driver.ActionElement(&ActionNormalParam{
 		Element: elementId,
 		Text:    sendKeys,
 	}, action)
@@ -455,7 +491,7 @@ func (driver DeviceDriverModel) ClearText(element *FindElementPoint) (serverErr 
 		return
 	}
 	time.Sleep(300 * time.Millisecond)
-	serverErr = driver.ActionElement(&ActionNormalParam{
+	_, serverErr = driver.ActionElement(&ActionNormalParam{
 		Element: elementId,
 		Text:    "",
 	}, Clear)

@@ -49,6 +49,21 @@ func NoOutPutString(commandShell string, commandList []string) (error *AppiumErr
 	return
 }
 
+func GetAdbOutputString(commandShell string, commandList []string) (error *AppiumError) {
+	cmd := exec.Command(commandShell, commandList...)
+
+	// 执行命令并忽略输出
+	err := cmd.Start()
+	if err != nil {
+		error = &AppiumError{
+			Message:   "Get shell output error",
+			ErrorCode: OsShellError,
+		}
+		return
+	}
+	return
+}
+
 // KillLoopCmd
 // @Note: this function can not kill subprocess, e,g
 // "python3 main.py"
